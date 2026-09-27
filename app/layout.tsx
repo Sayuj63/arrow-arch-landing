@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import "@fontsource-variable/inter";
 import "@fontsource-variable/space-grotesk";
 import "./globals.css";
+import SmoothScroll from "../components/smooth-scroll";
 import {
   repoUrl,
   sharedOpenGraph,
@@ -87,6 +88,7 @@ export default function RootLayout({
             __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c"),
           }}
         />
+        <SmoothScroll />
         {children}
       </body>
     </html>

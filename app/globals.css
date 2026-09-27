@@ -12,8 +12,18 @@
   box-sizing: border-box;
 }
 html {
-  scroll-behavior: smooth;
-  scroll-padding-top: 105px;
+  scroll-padding-top: 72px;
+}
+/* Lenis (components/smooth-scroll.tsx) */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis:not(.lenis-autoToggle).lenis-stopped {
+  overflow: clip;
+}
+.lenis.lenis-smooth iframe {
+  pointer-events: none;
 }
 body {
   margin: 0;
@@ -1359,7 +1369,7 @@ img {
 }
 @media (max-width: 780px) {
   html {
-    scroll-padding-top: 88px;
+    scroll-padding-top: 64px;
   }
   .section-shell {
     padding-left: 6%;
