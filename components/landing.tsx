@@ -4,6 +4,7 @@ import Link from "next/link";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Brand, DemoLink, Icon, SectionLabel } from "./ui";
+import Hero from "./hero";
 gsap.registerPlugin(ScrollTrigger);
 const roles = [
   {
@@ -161,22 +162,17 @@ export default function Landing() {
       mm.add("(prefers-reduced-motion: no-preference)", () => {
         gsap
           .timeline({ defaults: { ease: "power3.out" } })
-          .from(".hero .line-inner", {
-            yPercent: 115,
-            duration: 1,
-            stagger: 0.13,
+          .from(".launch-line > span", {
+            yPercent: 110,
+            duration: 0.85,
+            stagger: 0.1,
           })
           .from(
-            ".hero-visual",
-            { clipPath: "inset(0 100% 0 0)", opacity: 0, duration: 1.2 },
-            0.3,
+            ".launch-reveal",
+            { opacity: 0, y: 16, duration: 0.65, stagger: 0.07 },
+            0.2,
           )
-          .from(".hero-target", { opacity: 0, scale: 0.8, duration: 0.6 }, 1)
-          .from(
-            ".hero-copy .hero-detail",
-            { opacity: 0, y: 24, duration: 0.65, stagger: 0.12 },
-            0.7,
-          );
+          .from(".launch-console", { opacity: 0, y: 26, duration: 0.9 }, 0.45);
         gsap.from(".source-node", {
           opacity: 0,
           y: 24,
@@ -185,17 +181,15 @@ export default function Landing() {
           ease: "power3.out",
           scrollTrigger: { trigger: ".signals", start: "top 80%", once: true },
         });
-        gsap.utils
-          .toArray<HTMLElement>("[data-reveal]")
-          .forEach((el) =>
-            gsap.from(el, {
-              y: 30,
-              opacity: 0,
-              duration: 0.85,
-              ease: "power3.out",
-              scrollTrigger: { trigger: el, start: "top 91%", once: true },
-            }),
-          );
+        gsap.utils.toArray<HTMLElement>("[data-reveal]").forEach((el) =>
+          gsap.from(el, {
+            y: 30,
+            opacity: 0,
+            duration: 0.85,
+            ease: "power3.out",
+            scrollTrigger: { trigger: el, start: "top 91%", once: true },
+          }),
+        );
         document
           .querySelectorAll<SVGPathElement>("[data-draw]")
           .forEach((path) => {
@@ -228,21 +222,19 @@ export default function Landing() {
           transformOrigin: "left",
           ease: "none",
         });
-        gsap.utils
-          .toArray<HTMLElement>(".role-node")
-          .forEach((el, i) =>
-            crew.fromTo(
-              el,
-              { borderColor: "#dadde2", color: "#68717f" },
-              {
-                borderColor: "#ff5a00",
-                color: "#d44900",
-                boxShadow: "0 0 32px rgba(255,90,0,.13)",
-                duration: 0.2,
-              },
-              i * 0.16,
-            ),
-          );
+        gsap.utils.toArray<HTMLElement>(".role-node").forEach((el, i) =>
+          crew.fromTo(
+            el,
+            { borderColor: "#dadde2", color: "#68717f" },
+            {
+              borderColor: "#ff5a00",
+              color: "#d44900",
+              boxShadow: "0 0 32px rgba(255,90,0,.13)",
+              duration: 0.2,
+            },
+            i * 0.16,
+          ),
+        );
         gsap.from(".memory-tag", {
           x: -26,
           opacity: 0,
@@ -298,7 +290,7 @@ export default function Landing() {
       <a className="skip-link" href="#main">
         Skip to content
       </a>
-      <header className="site-header">
+      <header className="site-header launch-header">
         <div className="header-inner">
           <Brand />
           <nav
@@ -329,67 +321,7 @@ export default function Landing() {
         </div>
       </header>
       <main id="main">
-        <section className="hero section-shell" aria-labelledby="hero-title">
-          <div className="hero-grid" aria-hidden="true" />
-          <div className="hero-copy">
-            <div className="eyebrow hero-detail">
-              <span className="status-dot" /> VERIFIED MULTI-AGENT DELIVERY
-            </div>
-            <h1 id="hero-title">
-              <span className="line-mask">
-                <span className="line-inner">Aim once.</span>
-              </span>
-              <span className="line-mask">
-                <span className="line-inner accent">Land once.</span>
-              </span>
-            </h1>
-            <p className="hero-description hero-detail">
-              One clear request in. A bounded AI crew plans, builds and proves
-              the change before it lands.
-            </p>
-            <div className="cta-row hero-detail">
-              <DemoLink />
-              <a className="text-link" href="#crew">
-                See how it works <span>↘</span>
-              </a>
-            </div>
-            <p className="bob-line hero-detail">
-              Powered by <strong>IBM Bob Shell</strong> for the model roles.
-            </p>
-          </div>
-          <div className="hero-visual">
-            <img
-              src="/assets/illustrations/hero-trajectory.webp"
-              width="1672"
-              height="941"
-              alt="An orange trajectory connects a request, an AI crew and verified code to a target."
-              fetchPriority="high"
-            />
-            <span className="visual-coordinate coordinate-start">
-              01 — THE REQUEST
-            </span>
-            <span className="visual-coordinate coordinate-end hero-target">
-              06 — THE LANDING <span>↗</span>
-            </span>
-          </div>
-          <div className="hero-bottom">
-            <div className="proof-chips">
-              {[
-                ["worktree", "Isolated workers"],
-                ["shield", "Independent checks"],
-                ["git_branch", "Reviewable branch"],
-              ].map(([icon, label]) => (
-                <span key={icon}>
-                  <Icon name={icon} />
-                  {label}
-                </span>
-              ))}
-            </div>
-            <a href="#why" className="scroll-cue">
-              FOLLOW THE TRAJECTORY <span>↓</span>
-            </a>
-          </div>
-        </section>
+        <Hero />
         <section
           id="why"
           className="research section-shell section-space"

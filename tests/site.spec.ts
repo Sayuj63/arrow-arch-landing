@@ -109,3 +109,26 @@ test("all local links and assets resolve", async ({ page, request }) => {
     );
   expect(missing).toEqual([]);
 });
+
+test("hero stage selection supports pointer and keyboard", async ({ page }) => {
+  await page.goto("/");
+  const stages = page.getByRole("tablist", {
+    name: "Explore the delivery stages",
+  });
+  const plan = stages.getByRole("tab", { name: /Plan/ });
+  await plan.click();
+  await expect(plan).toHaveAttribute("aria-selected", "true");
+  await expect(page.getByRole("tabpanel")).toContainText(
+    "Human approval required",
+  );
+  await plan.press("End");
+  const land = stages.getByRole("tab", { name: /Land/ });
+  await expect(land).toBeFocused();
+  await expect(land).toHaveAttribute("aria-selected", "true");
+  await expect(page.getByRole("tabpanel")).toContainText("No automatic push");
+  await land.press("ArrowRight");
+  await expect(stages.getByRole("tab", { name: /Understand/ })).toBeFocused();
+  await expect(page.getByRole("tabpanel")).toContainText(
+    "Acceptance criteria defined",
+  );
+});
