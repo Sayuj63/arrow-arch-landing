@@ -24,9 +24,7 @@ export function Brand() {
   return (
     <Link className="brand" href="/" aria-label="The Arrow Arch home">
       <img src="/assets/arrow-mark.svg" alt="" width="31" height="31" />
-      <span>
-        THE ARROW ARCH<span className="brand-dot">®</span>
-      </span>
+      <span>THE ARROW ARCH</span>
     </Link>
   );
 }
