@@ -8,7 +8,7 @@ test("desktop story, FAQ and demo navigation", async ({ page }) => {
   await expect(
     page.getByRole("heading", { name: "Aim once. Land once.", level: 1 }),
   ).toBeVisible();
-  await expect(page.locator("main>section")).toHaveCount(6);
+  await expect(page.locator("main>section")).toHaveCount(7);
   await page.locator("#faq").scrollIntoViewIfNeeded();
   const failure = page.getByRole("button", {
     name: "What happens when a worker fails?",

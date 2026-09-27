@@ -221,7 +221,7 @@
   align-items: center;
   justify-content: center;
   gap: 10px;
-  font-family: monospace;
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
   font-size: 8px;
   letter-spacing: 0.045em;
   color: #697078;
@@ -252,7 +252,7 @@
 .launch-corner {
   position: absolute;
   color: #adb0b6;
-  font-family: monospace;
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
   font-size: 15px;
   font-weight: 300;
   top: -10px;
@@ -284,7 +284,7 @@
   display: flex;
   align-items: center;
   gap: 9px;
-  font-family: monospace;
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
   font-size: 9px;
   letter-spacing: 0.025em;
   color: #535862;
@@ -301,7 +301,7 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  font-family: monospace;
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
   font-size: 8px;
   letter-spacing: 0.05em;
   color: #686f79;
@@ -348,7 +348,7 @@
   z-index: 1;
   left: 22px;
   top: 16px;
-  font-family: monospace;
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
   font-size: 8px;
   letter-spacing: 0.07em;
   color: #666f7a;
@@ -394,7 +394,7 @@
   display: flex;
   align-items: center;
   gap: 7px;
-  font-family: monospace;
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
   font-size: 9px;
   letter-spacing: 0.045em;
   color: #b7460a;
@@ -452,7 +452,7 @@
   border-top: 1px solid #e7e9ec;
 }
 .launch-artifact > span {
-  font-family: monospace;
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
   font-size: 7px;
   letter-spacing: 0.04em;
   color: #66717b;
@@ -519,7 +519,7 @@
   z-index: 2;
 }
 .launch-stage-number {
-  font-family: monospace;
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
   font-size: 8px;
   color: #656b74;
 }
@@ -564,7 +564,7 @@
   display: flex;
   align-items: center;
   gap: 13px;
-  font-family: monospace;
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
   font-size: 8px;
   letter-spacing: 0.04em;
   color: #666e79;

@@ -3,9 +3,11 @@ import { useLayoutEffect, useRef, useState } from "react";
 import Link from "next/link";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { Brand, DemoLink, Icon, SectionLabel } from "./ui";
+import { Brand, DemoLink, Icon } from "./ui";
 import Hero from "./hero";
+import "./sections.css";
 gsap.registerPlugin(ScrollTrigger);
+const REPO = "https://github.com/AnshumanAtrey/the-arrow-arch";
 const roles = [
   {
     name: "PM",
@@ -45,23 +47,50 @@ const roles = [
 ];
 const problems = [
   [
+    "memory",
     "Context disappears",
     "Earlier decisions get lost. The re-explaining starts again.",
   ],
-  ["Workers collide", "The same files. The same ports. Conflicting changes."],
-  ["“Done” is not proof", "A confident summary can still hide a failing test."],
   [
+    "workers",
+    "Workers collide",
+    "The same files. The same ports. Conflicting changes.",
+  ],
+  [
+    "verifier",
+    "“Done” is not proof",
+    "A confident summary can still hide a failing test.",
+  ],
+  [
+    "rules",
     "Project conventions drift",
     "Wrong folders, wrong APIs, unnecessary dependencies.",
   ],
   [
+    "code",
     "Fixes create collateral damage",
     "A repair breaks working code. The loop continues.",
   ],
   [
+    "pm",
     "Humans still babysit the output",
     "Reviewing everything becomes a second full-time job.",
   ],
+];
+const fragments = [
+  "It forgot the earlier decision.",
+  "The fix broke another part.",
+  "Two agents changed the same thing.",
+];
+const memoryInputs = [
+  "Repository",
+  "Company / team rules",
+  "Folder structure",
+  "Commands + versions",
+  "Tech stack",
+  "Coding conventions",
+  "Approval rules",
+  "Existing workflows",
 ];
 const faqs = [
   [
@@ -81,6 +110,53 @@ const faqs = [
     "The current product produces a local reviewable task branch. It does not automatically push production changes.",
   ],
 ];
+function Rails() {
+  return (
+    <div className="band-rails" aria-hidden="true">
+      <span />
+      <span />
+    </div>
+  );
+}
+function Corners() {
+  return (
+    <>
+      <span className="launch-corner corner-tl" aria-hidden="true">
+        +
+      </span>
+      <span className="launch-corner corner-tr" aria-hidden="true">
+        +
+      </span>
+    </>
+  );
+}
+function BandHead({
+  tag,
+  id,
+  title,
+  accent,
+  muted = false,
+  children,
+}: {
+  tag: string;
+  id: string;
+  title: string;
+  accent: string;
+  muted?: boolean;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="band-head" data-reveal>
+      <span className="band-tag">[ {tag} ]</span>
+      <h2 id={id}>
+        {title}
+        <br />
+        <span className={muted ? "muted-heading" : "accent"}>{accent}</span>
+      </h2>
+      <p>{children}</p>
+    </div>
+  );
+}
 function FAQ() {
   const [open, setOpen] = useState<number | null>(0);
   const panels = useRef<(HTMLDivElement | null)[]>([]);
@@ -99,22 +175,13 @@ function FAQ() {
           overwrite: true,
         });
     });
-    panels.current.forEach((el, index) => {
-      const plus = el?.previousElementSibling?.querySelector(".plus");
-      if (plus)
-        gsap.to(plus, {
-          rotation: index === next ? 45 : 0,
-          duration: reduce ? 0 : 0.35,
-          ease: "power3.out",
-          overwrite: true,
-        });
-    });
     setOpen(next);
   }
   return (
-    <div className="faq-list">
+    <div className="faq-frame">
+      <Corners />
       {faqs.map(([q, a], i) => (
-        <div className={`faq-row ${open === i ? "is-open" : ""}`} key={q}>
+        <div className={`faq-item ${open === i ? "is-open" : ""}`} key={q}>
           <h3>
             <button
               aria-expanded={open === i}
@@ -122,10 +189,11 @@ function FAQ() {
               id={`faq-question-${i}`}
               onClick={() => toggle(i)}
             >
-              <span>{q}</span>
-              <span className="plus" aria-hidden="true">
-                +
+              <span className="faq-index" aria-hidden="true">
+                0{i + 1}
               </span>
+              <span>{q}</span>
+              <span className="faq-toggle" aria-hidden="true" />
             </button>
           </h3>
           <div
@@ -136,7 +204,7 @@ function FAQ() {
             ref={(el) => {
               panels.current[i] = el;
             }}
-            className="faq-panel"
+            className="faq-answer"
             style={{ height: i === 0 ? "auto" : 0, opacity: i === 0 ? 1 : 0 }}
           >
             <p>{a}</p>
@@ -173,111 +241,72 @@ export default function Landing() {
             0.2,
           )
           .from(".launch-console", { opacity: 0, y: 26, duration: 0.9 }, 0.45);
-        gsap.from(".source-node", {
-          opacity: 0,
-          y: 24,
-          stagger: 0.15,
-          duration: 0.8,
-          ease: "power3.out",
-          scrollTrigger: { trigger: ".signals", start: "top 80%", once: true },
-        });
         gsap.utils.toArray<HTMLElement>("[data-reveal]").forEach((el) =>
           gsap.from(el, {
-            y: 30,
+            y: 24,
             opacity: 0,
-            duration: 0.85,
+            duration: 0.8,
             ease: "power3.out",
-            scrollTrigger: { trigger: el, start: "top 91%", once: true },
+            scrollTrigger: { trigger: el, start: "top 90%", once: true },
           }),
         );
-        document
-          .querySelectorAll<SVGPathElement>("[data-draw]")
-          .forEach((path) => {
-            const length = path.getTotalLength();
-            gsap.fromTo(
-              path,
-              { strokeDasharray: length, strokeDashoffset: length },
-              {
-                strokeDashoffset: 0,
-                duration: 1.4,
-                ease: "power3.out",
-                scrollTrigger: {
-                  trigger: path.closest("section"),
-                  start: "top 62%",
-                  once: true,
-                },
-              },
-            );
-          });
+        gsap.utils.toArray<HTMLElement>("[data-stagger]").forEach((group) =>
+          gsap.from(group.children, {
+            y: 14,
+            opacity: 0,
+            duration: 0.6,
+            stagger: 0.06,
+            ease: "power3.out",
+            scrollTrigger: { trigger: group, start: "top 85%", once: true },
+          }),
+        );
         const crew = gsap.timeline({
           scrollTrigger: {
-            trigger: ".crew-scene",
-            start: "top 80%",
-            end: "bottom 65%",
+            trigger: ".crew-roles",
+            start: "top 78%",
+            end: "bottom 60%",
             scrub: 0.7,
           },
         });
-        crew.from(".crew-progress", {
+        crew.from(".crew-track-fill", {
           scaleX: 0,
           transformOrigin: "left",
           ease: "none",
+          duration: 1,
         });
-        gsap.utils.toArray<HTMLElement>(".role-node").forEach((el, i) =>
-          crew.fromTo(
+        gsap.utils.toArray<HTMLElement>(".crew-tile").forEach((el, i) =>
+          crew.to(
             el,
-            { borderColor: "#dadde2", color: "#68717f" },
             {
-              borderColor: "#ff5a00",
-              color: "#d44900",
-              boxShadow: "0 0 32px rgba(255,90,0,.13)",
-              duration: 0.2,
+              borderColor: "#ffb88f",
+              backgroundColor: "#fff5ed",
+              color: "#c24400",
+              duration: 0.12,
             },
-            i * 0.16,
+            i * 0.2,
           ),
         );
-        gsap.from(".memory-tag", {
-          x: -26,
-          opacity: 0,
-          stagger: 0.07,
-          duration: 0.8,
-          scrollTrigger: {
-            trigger: ".memory-scene",
-            start: "top 72%",
-            once: true,
-          },
-        });
-        gsap.from(".memory-output", {
-          x: -20,
-          opacity: 0,
-          stagger: 0.2,
-          duration: 0.8,
-          scrollTrigger: {
-            trigger: ".memory-scene",
-            start: "center 80%",
-            once: true,
-          },
-        });
         gsap
           .timeline({
             scrollTrigger: {
-              trigger: ".proof-canvas",
+              trigger: ".proof-diff",
               start: "top 76%",
               once: true,
             },
           })
-          .from(".diff-line", {
+          .from(".diff-row", {
             opacity: 0,
-            x: -18,
+            x: -14,
             duration: 0.4,
-            stagger: 0.1,
+            stagger: 0.08,
           })
-          .from(".check-row", {
+          .from(".proof-check", {
             opacity: 0,
-            y: 12,
+            y: 10,
             duration: 0.4,
-            stagger: 0.15,
+            stagger: 0.12,
           })
-          .from(".verified-stamp", { opacity: 0, scale: 0.95, duration: 0.5 });
+          .from(".proof-verdict", { opacity: 0, y: 8, duration: 0.5 });
       });
     }, root);
     return () => {
@@ -301,7 +330,8 @@ export default function Landing() {
               ["Why Arrow", "#why"],
               ["How it works", "#crew"],
               ["Onboarding", "#onboarding"],
-              ["Demo", "/demo"],
+              ["Proof", "#proof"],
+              ["FAQ", "#faq"],
             ].map(([label, href]) => (
               <Link href={href} key={href} onClick={() => setMenu(false)}>
                 {label}
@@ -322,404 +352,456 @@ export default function Landing() {
       </header>
       <main id="main">
         <Hero />
-        <section
-          id="why"
-          className="research section-shell section-space"
-          aria-labelledby="why-title"
-        >
-          <SectionLabel number="01">THE REASON FOR ARROW</SectionLabel>
-          <div className="section-heading" data-reveal>
-            <h2 id="why-title">
-              Real problems.
-              <br />
-              <span className="muted-heading">A more deliberate system.</span>
-            </h2>
-            <p>
+
+        <section id="why" className="band" aria-labelledby="why-title">
+          <Rails />
+          <div className="band-inner">
+            <BandHead
+              tag="01 / THE REASON FOR ARROW"
+              id="why-title"
+              title="Real problems."
+              accent="A more deliberate system."
+              muted
+            >
               Built around the things developers actually say when AI work goes
               sideways.
-            </p>
-          </div>
-          <div className="research-field">
-            <div className="signals">
-              <div className="source-node source-x">
-                <Icon name="x_source" />
-                <div>
-                  <strong>X</strong>
-                  <span>Founders / operators</span>
-                </div>
+            </BandHead>
+            <div className="frame" data-reveal>
+              <Corners />
+              <div className="frame-bar">
+                <span className="frame-label">
+                  <span className="frame-dot" /> RESEARCH THEMES
+                  <span className="frame-sub">/ paraphrased</span>
+                </span>
+                <span className="source-list">
+                  <span>
+                    <Icon name="x_source" /> X
+                  </span>
+                  <span>
+                    <Icon name="reddit_source" /> Reddit
+                  </span>
+                  <span>
+                    <Icon name="stackoverflow_source" /> Stack Overflow
+                  </span>
+                </span>
               </div>
-              <div className="source-node source-reddit">
-                <Icon name="reddit_source" />
-                <div>
-                  <strong>Reddit</strong>
-                  <span>Technical practitioners</span>
-                </div>
+              <div className="fragment-row">
+                {fragments.map((f) => (
+                  <p key={f}>
+                    <span className="fragment-quote" aria-hidden="true">
+                      “
+                    </span>
+                    {f}
+                  </p>
+                ))}
               </div>
-              <div className="source-node source-stack">
-                <Icon name="stackoverflow_source" />
-                <div>
-                  <strong>Stack Overflow</strong>
-                  <span>Developers</span>
-                </div>
-              </div>
-              <span className="signal-fragment fragment-one">
-                It forgot the earlier decision.
-              </span>
-              <span className="signal-fragment fragment-two">
-                The fix broke another part.
-              </span>
-              <span className="signal-fragment fragment-three">
-                Two agents changed the same thing.
-              </span>
-              <svg
-                className="signal-paths"
-                viewBox="0 0 620 420"
-                fill="none"
-                aria-hidden="true"
-              >
-                <path data-draw d="M90 65 C340 65 280 210 495 210" />
-                <path data-draw d="M130 205 C310 205 340 210 495 210" />
-                <path data-draw d="M100 345 C350 345 280 210 495 210" />
-                <path data-draw d="M495 210 H620" />
-              </svg>
-              <div className="memory-point">
-                <img
-                  src="/assets/arrow-mark.svg"
-                  width="43"
-                  height="43"
-                  alt=""
-                />
-              </div>
-              <span className="signal-caption">REPORTS → PATTERNS</span>
-            </div>
-            <div className="problem-constellation">
-              {problems.map(([title, body], i) => (
-                <div className="problem-phrase" key={title} data-reveal>
-                  <span className="problem-index">0{i + 1}</span>
-                  <div>
+              <div className="problem-grid" data-stagger>
+                {problems.map(([icon, title, body], i) => (
+                  <div className="problem-cell" key={title}>
+                    <div className="cell-top">
+                      <span className="cell-icon">
+                        <Icon name={icon} />
+                      </span>
+                      <span className="cell-index">0{i + 1}</span>
+                    </div>
                     <h3>{title}</h3>
                     <p>{body}</p>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
+              <div className="frame-foot">
+                <span className="pattern-flow">
+                  Real complaints <b>→</b> repeatable rules <b>→</b> safer
+                  execution
+                </span>
+                <span className="frame-note">
+                  Also in the reports: oversized context, invented APIs, the
+                  wrong thing built, environment setup failures and skipped or
+                  repeated tool calls.
+                </span>
+              </div>
             </div>
           </div>
-          <p className="research-footnote">
-            Also in the reports: oversized context, invented APIs, the wrong
-            thing built, environment setup failures and skipped or repeated tool
-            calls.
-          </p>
-          <div className="research-bottom">
-            <span>
-              Real complaints <b>→</b> repeatable rules <b>→</b> safer execution
-            </span>
-            <small>
-              Research themes, paraphrased from X, Reddit & Stack Overflow.
-            </small>
-          </div>
         </section>
-        <section
-          id="crew"
-          className="crew section-shell section-space"
-          aria-labelledby="crew-title"
-        >
-          <SectionLabel number="02">
-            ONE REQUEST. SHARED DIRECTION.
-          </SectionLabel>
-          <div className="section-heading" data-reveal>
-            <h2 id="crew-title">
-              One prompt.
-              <br />
-              <span className="accent">A whole crew behind it.</span>
-            </h2>
-            <p>
+
+        <section id="crew" className="band" aria-labelledby="crew-title">
+          <Rails />
+          <div className="band-inner">
+            <BandHead
+              tag="02 / HOW IT WORKS"
+              id="crew-title"
+              title="One prompt."
+              accent="A whole crew behind it."
+            >
               Each role exists to stop a different type of mistake. Every
               handoff has a purpose.
-            </p>
-          </div>
-          <div className="crew-scene">
-            <div className="crew-line" aria-hidden="true">
-              <div className="crew-progress" />
-              <span>→</span>
-            </div>
-            {roles.map((role, i) => (
-              <div className={`role role-${i}`} key={role.name}>
-                <div className="role-copy">
-                  <span className="role-number">
-                    0{i + 1} / {role.name.toUpperCase()}
-                  </span>
-                  <h3>{role.title}</h3>
-                  <p>{role.text}</p>
-                </div>
-                <div className="role-node">
-                  <Icon name={role.icon} />
-                </div>
-                <span className="role-artifact">{role.artifact}</span>
+            </BandHead>
+            <div className="frame" data-reveal>
+              <Corners />
+              <div className="frame-bar">
+                <span className="frame-label">
+                  <span className="frame-dot" /> ONE REQUEST
+                  <span className="frame-sub">/ shared direction</span>
+                </span>
+                <span className="frame-label">EXAMPLE REQUEST</span>
               </div>
-            ))}
-          </div>
-          <div className="crew-landing" data-reveal>
-            <span className="small-cross">+</span>
-            <Icon name="git_branch" />
-            <span>
-              Reviewable branch <span className="accent">+ proof trail</span>
-            </span>
-            <span className="mono">READY FOR HUMAN REVIEW ↗</span>
+              <div className="crew-prompt">
+                <Icon name="prompt" />
+                <span>
+                  “Add discount codes to checkout. Keep the existing payment
+                  flow intact.”
+                </span>
+                <span className="crew-prompt-send" aria-hidden="true">
+                  <Icon name="arrow" />
+                </span>
+              </div>
+              <div className="crew-roles">
+                <div className="crew-track" aria-hidden="true">
+                  <span className="crew-track-fill" />
+                </div>
+                {roles.map((role, i) => (
+                  <div className="crew-role" key={role.name}>
+                    <span className="cell-index">
+                      0{i + 1} / {role.name.toUpperCase()}
+                    </span>
+                    <span className="crew-tile">
+                      <Icon name={role.icon} />
+                    </span>
+                    <h3>{role.title}</h3>
+                    <p>{role.text}</p>
+                    <span className="crew-artifact">
+                      <span aria-hidden="true">→</span> {role.artifact}
+                    </span>
+                  </div>
+                ))}
+              </div>
+              <div className="frame-foot crew-foot">
+                <span className="crew-result">
+                  <span className="cell-icon">
+                    <Icon name="git_branch" />
+                  </span>
+                  Reviewable branch{" "}
+                  <span className="accent">+ proof trail</span>
+                </span>
+                <span className="frame-label">
+                  <span className="frame-dot" /> READY FOR HUMAN REVIEW
+                </span>
+              </div>
+            </div>
           </div>
         </section>
+
         <section
           id="onboarding"
-          className="onboarding section-shell section-space"
+          className="band"
           aria-labelledby="onboard-title"
         >
-          <SectionLabel number="03">YOUR REPO. YOUR RULES.</SectionLabel>
-          <div className="section-heading" data-reveal>
-            <h2 id="onboard-title">
-              Onboard once.
-              <br />
-              <span className="accent">Run with your rules.</span>
-            </h2>
-            <p>
+          <Rails />
+          <div className="band-inner">
+            <BandHead
+              tag="03 / YOUR REPO. YOUR RULES."
+              id="onboard-title"
+              title="Onboard once."
+              accent="Run with your rules."
+            >
               Arrow learns your repository, your rules and the way your team
               works. That project context stays available for future tasks.
-            </p>
+            </BandHead>
+            <div className="frame" data-reveal>
+              <Corners />
+              <div className="frame-bar">
+                <span className="frame-label">
+                  <span className="frame-dot" /> PROJECT MEMORY
+                  <span className="frame-sub">/ onboarding</span>
+                </span>
+                <span className="frame-label">REPO → MEMORY → EVERY TASK</span>
+              </div>
+              <div className="memory-layout">
+                <div className="memory-list">
+                  <span className="memory-list-title">WHAT ARROW LEARNS</span>
+                  <ul data-stagger>
+                    {memoryInputs.map((x, i) => (
+                      <li key={x}>
+                        <span className="cell-index">0{i + 1}</span>
+                        {x}
+                        <Icon name="verifier" />
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                <div className="memory-art">
+                  <img
+                    src="/assets/illustrations/onboarding-memory.webp"
+                    width="1672"
+                    height="941"
+                    loading="lazy"
+                    alt="Repository structure and team rules flow into a durable project memory vault."
+                  />
+                  <div className="memory-uses">
+                    <span>
+                      <Icon name="prompt" /> Future Arrow tasks
+                    </span>
+                    <span>
+                      <Icon name="code" /> New developer
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div className="memory-notes">
+                <div>
+                  <span className="cell-icon">
+                    <Icon name="memory" />
+                  </span>
+                  <span className="frame-label">PROJECT MEMORY</span>
+                  <h3>Keep the context. Skip the re-explaining.</h3>
+                  <p>
+                    Repo profile, commands, allowed structure, team conventions
+                    — including the rules you deliberately override.
+                  </p>
+                </div>
+                <div>
+                  <span className="cell-icon">
+                    <Icon name="code" />
+                  </span>
+                  <span className="frame-label">A NEW DEVELOPER JOINS?</span>
+                  <h3>The same memory. A human head start.</h3>
+                  <p>
+                    The project context that guides agents can also explain
+                    where things live, how to run the repo and which conventions
+                    matter.
+                  </p>
+                </div>
+              </div>
+            </div>
           </div>
-          <div className="memory-scene">
-            <div className="memory-inputs">
+        </section>
+
+        <section id="proof" className="band" aria-labelledby="proof-title">
+          <Rails />
+          <div className="band-inner">
+            <BandHead
+              tag="04 / TRUST THE LANDING"
+              id="proof-title"
+              title="Workers can say “done.”"
+              accent="Arrow still checks."
+            >
+              The model’s summary is never the final verdict. The control plane
+              reads the actual diff and re-runs the proof.
+            </BandHead>
+            <div className="frame proof-frame" data-reveal>
+              <Corners />
+              <div className="proof-col">
+                <div className="proof-point">
+                  <span className="cell-icon">
+                    <Icon name="worktree" />
+                  </span>
+                  <h3>Isolated work</h3>
+                  <p>Each worker edits its own Git worktree.</p>
+                </div>
+                <div className="proof-point">
+                  <span className="cell-icon">
+                    <Icon name="project_structure" />
+                  </span>
+                  <h3>File scope</h3>
+                  <p>Changes stay inside the packet’s allowed files.</p>
+                </div>
+              </div>
+              <div className="proof-diff">
+                <div className="frame-bar">
+                  <span className="frame-label">
+                    <span className="frame-dot" /> CHANGE REVIEW
+                  </span>
+                  <span className="frame-label">ILLUSTRATIVE RUN</span>
+                </div>
+                <div className="diff-head">
+                  <Icon name="code" /> src / checkout / total.ts
+                  <span>
+                    <b>+3</b> −1
+                  </span>
+                </div>
+                <div className="diff-body">
+                  <div className="diff-row">
+                    <span>12</span>export function total(items) {"{"}
+                  </div>
+                  <div className="diff-row removed">
+                    <span>13 −</span>
+                    {"  return sum(items);"}
+                  </div>
+                  <div className="diff-row added">
+                    <span>13 +</span>
+                    {"  const subtotal = sum(items);"}
+                  </div>
+                  <div className="diff-row added">
+                    <span>14 +</span>
+                    {"  return applyDiscount(subtotal);"}
+                  </div>
+                  <div className="diff-row">
+                    <span>15</span>
+                    {"}"}
+                  </div>
+                </div>
+                <div className="proof-checks-list">
+                  {[
+                    "Changed files match allowed scope",
+                    "Required checks independently re-run",
+                    "Diff and proof attached to branch",
+                  ].map((c) => (
+                    <div className="proof-check" key={c}>
+                      <Icon name="verifier" />
+                      <span>{c}</span>
+                      <b>PASS</b>
+                    </div>
+                  ))}
+                </div>
+                <div className="proof-verdict">
+                  <Icon name="shield" />
+                  <strong>Proven. Ready for review.</strong>
+                  <Icon name="arrow" />
+                </div>
+              </div>
+              <div className="proof-col">
+                <div className="proof-point">
+                  <span className="cell-icon">
+                    <Icon name="git_branch" />
+                  </span>
+                  <h3>Live ledger</h3>
+                  <p>Workers, processes, ports and ownership. Accounted for.</p>
+                </div>
+                <div className="proof-point">
+                  <span className="cell-icon">
+                    <Icon name="shield" />
+                  </span>
+                  <h3>Independent proof</h3>
+                  <p>Arrow runs required commands before a packet can land.</p>
+                </div>
+              </div>
+            </div>
+            <div className="usecase-strip" data-reveal>
+              <span className="usecase-lead">
+                Small fix or large feature.
+                <strong>Same control system.</strong>
+              </span>
               {[
-                "Repository",
-                "Company / team rules",
-                "Folder structure",
-                "Commands + versions",
-                "Tech stack",
-                "Coding conventions",
-                "Approval rules",
-                "Existing workflows",
-              ].map((x, i) => (
-                <span className="memory-tag" key={x}>
-                  <span className="mono">0{i + 1}</span>
-                  {x}
-                  <span className="accent">↗</span>
+                ["code", "Web apps"],
+                ["mobile", "Mobile"],
+                ["server", "Backend / internal"],
+                ["game", "Game development"],
+                ["architect", "Any codebase"],
+              ].map(([icon, text]) => (
+                <span className="usecase" key={icon}>
+                  <Icon name={icon} />
+                  {text}
                 </span>
               ))}
             </div>
-            <div className="memory-visual">
-              <img
-                src="/assets/illustrations/onboarding-memory.webp"
-                width="1672"
-                height="941"
-                loading="lazy"
-                alt="Repository structure and team rules flow into a durable project memory vault."
-              />
-              <div className="memory-outputs">
-                <span className="memory-output">
-                  <Icon name="prompt" /> Future Arrow tasks <b>↗</b>
-                </span>
-                <span className="memory-output">
-                  <Icon name="code" /> New developer <b>↗</b>
-                </span>
-              </div>
-            </div>
-          </div>
-          <div className="onboarding-notes" data-reveal>
-            <div>
-              <span className="mono">PROJECT MEMORY</span>
-              <h3>
-                Keep the context.
-                <br />
-                Skip the re-explaining.
-              </h3>
-              <p>
-                Repo profile, commands, allowed structure, team conventions —
-                including the rules you deliberately override.
-              </p>
-            </div>
-            <div>
-              <span className="mono">A NEW DEVELOPER JOINS?</span>
-              <h3>
-                The same memory.
-                <br />A human head start.
-              </h3>
-              <p>
-                The project context that guides agents can also explain where
-                things live, how to run the repo and which conventions matter.
-              </p>
-            </div>
-          </div>
-        </section>
-        <section
-          id="proof"
-          className="proof section-shell section-space"
-          aria-labelledby="proof-title"
-        >
-          <SectionLabel number="04">TRUST THE LANDING</SectionLabel>
-          <div className="section-heading" data-reveal>
-            <h2 id="proof-title">
-              Workers can say “done.”
-              <br />
-              <span className="accent">Arrow still checks.</span>
-            </h2>
-            <p>
-              The model’s summary is never the final verdict. The control plane
-              reads the actual diff and re-runs the proof.
+            <p className="band-caption">
+              Execution follows your repository’s toolchain and rules.
             </p>
           </div>
-          <div className="proof-scene">
-            <div className="proof-side">
-              <div>
-                <Icon name="worktree" />
-                <h3>Isolated work</h3>
-                <p>Each worker edits its own Git worktree.</p>
-              </div>
-              <div>
-                <Icon name="project_structure" />
-                <h3>File scope</h3>
-                <p>Changes stay inside the packet’s allowed files.</p>
-              </div>
-            </div>
-            <div className="proof-canvas">
-              <div className="canvas-top">
-                <span>
-                  <i /> CHANGE REVIEW
-                </span>
-                <span className="mono">ILLUSTRATIVE RUN</span>
-              </div>
-              <div className="diff-file">
-                <Icon name="code" /> src / checkout / total.ts{" "}
-                <span>+3 −1</span>
-              </div>
-              <div className="diff-code">
-                <div className="diff-line context">
-                  <span>12</span> export function total(items) {"{"}
-                </div>
-                <div className="diff-line removed">
-                  <span>13 −</span> return sum(items);
-                </div>
-                <div className="diff-line added">
-                  <span>13 +</span> const subtotal = sum(items);
-                </div>
-                <div className="diff-line added">
-                  <span>14 +</span> return applyDiscount(subtotal);
-                </div>
-                <div className="diff-line context">
-                  <span>15</span> {"}"}
-                </div>
-              </div>
-              <div className="proof-checks">
-                <div className="check-row">
-                  <Icon name="verifier" />
-                  <span>Changed files match allowed scope</span>
-                  <b>PASS</b>
-                </div>
-                <div className="check-row">
-                  <Icon name="verifier" />
-                  <span>Required checks independently re-run</span>
-                  <b>PASS</b>
-                </div>
-                <div className="check-row">
-                  <Icon name="verifier" />
-                  <span>Diff and proof attached to branch</span>
-                  <b>PASS</b>
-                </div>
-              </div>
-              <div className="verified-stamp">
-                <Icon name="shield" />
-                <strong>Proven. Ready for review.</strong>
-                <Icon name="arrow" />
-              </div>
-            </div>
-            <div className="proof-side">
-              <div>
-                <Icon name="git_branch" />
-                <h3>Live ledger</h3>
-                <p>Workers, processes, ports and ownership. Accounted for.</p>
-              </div>
-              <div>
-                <Icon name="shield" />
-                <h3>Independent proof</h3>
-                <p>Arrow runs required commands before a packet can land.</p>
-              </div>
-            </div>
-          </div>
-          <div className="use-case-ribbon">
-            {[
-              ["code", "Web apps"],
-              ["mobile", "Mobile"],
-              ["server", "Backend / internal"],
-              ["game", "Game development"],
-              ["architect", "Any codebase"],
-            ].map(([icon, text]) => (
-              <span key={icon}>
-                <Icon name={icon} />
-                {text}
-              </span>
-            ))}
-          </div>
-          <p className="ribbon-caption">
-            Small fix or large feature. Same control system.
-            <span>
-              Execution follows your repository’s toolchain and rules.
-            </span>
-          </p>
         </section>
-        <section
-          id="faq"
-          className="closing-section section-shell section-space"
-          aria-labelledby="faq-title"
-        >
-          <SectionLabel number="05">A FEW THINGS, BEFORE YOU ASK.</SectionLabel>
-          <div className="faq-layout">
-            <h2 id="faq-title" data-reveal>
-              Questions are cheap.
-              <br />
-              <span className="muted-heading">
-                Unproven code
+
+        <section id="faq" className="band" aria-labelledby="faq-title">
+          <Rails />
+          <div className="band-inner faq-layout-v2">
+            <div className="faq-intro" data-reveal>
+              <span className="band-tag">[ 05 / BEFORE YOU ASK ]</span>
+              <h2 id="faq-title">
+                Questions are cheap.
                 <br />
-                is expensive.
-              </span>
-            </h2>
+                <span className="muted-heading">
+                  Unproven code is expensive.
+                </span>
+              </h2>
+              <p>
+                Still curious? Step through a sample request in the interactive
+                walkthrough, or read the source.
+              </p>
+              <div className="faq-links">
+                <Link href="/demo">
+                  Interactive walkthrough <span aria-hidden="true">→</span>
+                </Link>
+                <a href={REPO} target="_blank" rel="noreferrer">
+                  GitHub repository <span aria-hidden="true">↗</span>
+                </a>
+              </div>
+            </div>
             <FAQ />
           </div>
-          <div className="closing" data-reveal>
-            <img
-              className="closing-watermark"
-              src="/assets/arrow-mark.svg"
-              alt=""
-              width="380"
-              height="380"
-            />
-            <span className="eyebrow">
-              <span className="status-dot" /> YOUR NEXT CHANGE STARTS HERE
-            </span>
-            <h2>
-              Aim once.
-              <br />
-              <span className="accent">Land once.</span>
-            </h2>
-            <p>
-              Give Arrow a clear request. Get back a reviewable branch with a
-              proof trail.
-            </p>
-            <div className="cta-row">
-              <DemoLink />
-              <a
-                className="text-link"
-                href="https://github.com/AnshumanAtrey/the-arrow-arch"
-                target="_blank"
-                rel="noreferrer"
-              >
-                View repository <span>↗</span>
-              </a>
+        </section>
+
+        <section className="band cta-band" aria-labelledby="cta-title">
+          <Rails />
+          <div className="band-inner">
+            <div className="cta-panel" data-reveal>
+              <Corners />
+              <div className="cta-grid" aria-hidden="true" />
+              <span className="launch-badge">
+                <span className="launch-badge-mark">
+                  <Icon name="git_branch" />
+                </span>
+                Your next change starts here
+              </span>
+              <h2 id="cta-title">
+                Aim once. <span className="accent">Land once.</span>
+              </h2>
+              <p>
+                Give Arrow a clear request. Get back a reviewable branch with a
+                proof trail.
+              </p>
+              <div className="launch-actions">
+                <DemoLink />
+                <a
+                  href={REPO}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="launch-repo"
+                >
+                  <Icon name="code" /> View repository{" "}
+                  <span aria-hidden="true">↗</span>
+                </a>
+              </div>
             </div>
           </div>
         </section>
       </main>
-      <footer className="footer section-shell">
-        <Brand />
-        <p>Built with IBM Bob Shell for model execution.</p>
-        <a href="#main" className="back-top">
-          BACK TO TOP ↑
-        </a>
+      <footer className="site-footer">
+        <Rails />
+        <div className="band-inner">
+          <div className="footer-top">
+            <div className="footer-brand">
+              <Brand />
+              <p>
+                A bounded AI crew that plans, builds and proves code changes
+                before they land on a branch you review.
+              </p>
+            </div>
+            <nav className="footer-col" aria-label="Product">
+              <span>PRODUCT</span>
+              <a href="#why">Why Arrow</a>
+              <a href="#crew">How it works</a>
+              <a href="#onboarding">Onboarding</a>
+              <a href="#proof">Proof</a>
+              <a href="#faq">FAQ</a>
+            </nav>
+            <nav className="footer-col" aria-label="Resources">
+              <span>RESOURCES</span>
+              <Link href="/demo">Interactive walkthrough</Link>
+              <Link href="/demo#setup">Run it locally</Link>
+              <a href={REPO} target="_blank" rel="noreferrer">
+                GitHub repository ↗
+              </a>
+            </nav>
+          </div>
+          <div className="footer-bottom">
+            <span>Built with IBM Bob Shell for model execution.</span>
+            <span>
+              Examples on this site are illustrative. No agents run here.
+            </span>
+            <a href="#main" className="footer-top-link">
+              BACK TO TOP ↑
+            </a>
+          </div>
+        </div>
       </footer>
     </div>
   );

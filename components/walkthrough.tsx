@@ -159,7 +159,11 @@ export default function Walkthrough() {
             </div>
           </div>
         </div>
-        <section className="local-setup" aria-labelledby="setup-title">
+        <section
+          id="setup"
+          className="local-setup"
+          aria-labelledby="setup-title"
+        >
           <div>
             <span className="mono accent">RUN THE REAL THING</span>
             <h2 id="setup-title">
