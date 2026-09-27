@@ -2,6 +2,8 @@
 
 **Aim once. Land once.**
 
+[Live site](https://arrow-arch-landing.vercel.app) · [Interactive walkthrough](https://arrow-arch-landing.vercel.app/demo)
+
 A white, editorial launch experience for The Arrow Arch: a bounded AI crew that plans, builds and independently verifies code before landing a reviewable local branch.
 
 ## What is here
@@ -48,7 +50,7 @@ tests/                Browser, responsive, link and accessibility checks
 
 ## Deploy
 
-Deploy on Vercel with the Next.js preset. There are no required secrets, database, or server credentials. The repository is linked to Vercel for Git-based deployments.
+Deploy on Vercel with the Next.js preset. There are no required secrets, database, or server credentials. Production is deployed with the authenticated Vercel CLI. GitHub Actions validates pushes and pull requests. Automatic Vercel deployments are not connected yet: the Vercel account’s GitHub integration needs access to `Sayuj63/arrow-arch-landing`. After granting access in Vercel’s Git settings, run `npx vercel git connect`.
 
 ```sh
 npx vercel link
