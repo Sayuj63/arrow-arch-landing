@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import "@fontsource-variable/inter";
+import "@fontsource-variable/space-grotesk";
 import "./globals.css";
 import {
   repoUrl,

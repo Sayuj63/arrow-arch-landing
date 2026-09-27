@@ -53,9 +53,9 @@
 }
 .band-head h2,
 .faq-intro h2 {
-  font-size: clamp(36px, 4.1vw, 56px);
-  line-height: 1.08;
-  letter-spacing: -0.058em;
+  font-size: clamp(30px, 3.2vw, 42px);
+  line-height: 1.1;
+  letter-spacing: -0.04em;
   margin: 20px 0 16px;
 }
 .band-head p {
@@ -212,7 +212,7 @@
 }
 .problem-cell h3 {
   font-size: 18px;
-  letter-spacing: -0.04em;
+  letter-spacing: -0.025em;
   line-height: 1.25;
   margin-bottom: 8px;
 }
@@ -326,7 +326,7 @@
 }
 .crew-role h3 {
   font-size: 16px;
-  letter-spacing: -0.04em;
+  letter-spacing: -0.025em;
   margin-bottom: 7px;
 }
 .crew-role p {
@@ -461,7 +461,7 @@
 }
 .memory-notes h3 {
   font-size: 18px;
-  letter-spacing: -0.04em;
+  letter-spacing: -0.025em;
   margin: 8px 0 8px;
 }
 .memory-notes p {
@@ -492,7 +492,7 @@
 }
 .proof-point h3 {
   font-size: 16px;
-  letter-spacing: -0.04em;
+  letter-spacing: -0.025em;
   margin: 22px 0 6px;
 }
 .proof-point p {
@@ -665,7 +665,7 @@
 }
 .faq-intro h2 {
   margin-top: 22px;
-  font-size: clamp(34px, 3.5vw, 48px);
+  font-size: clamp(28px, 2.8vw, 38px);
 }
 .faq-intro p {
   font-size: 15px;
@@ -826,9 +826,9 @@
   background: linear-gradient(90deg, transparent, var(--orange), transparent);
 }
 .cta-panel h2 {
-  font-size: clamp(44px, 5.6vw, 80px);
-  line-height: 1.05;
-  letter-spacing: -0.064em;
+  font-size: clamp(36px, 4.3vw, 58px);
+  line-height: 1.08;
+  letter-spacing: -0.045em;
   margin: 22px 0 16px;
 }
 .cta-panel > p {
@@ -977,7 +977,7 @@
   }
   .band-head h2,
   .faq-intro h2 {
-    font-size: clamp(32px, 8.4vw, 44px);
+    font-size: clamp(28px, 7.4vw, 36px);
   }
   .band-head p {
     font-size: 14px;
@@ -1260,7 +1260,7 @@
     padding: 60px 18px 64px;
   }
   .cta-panel h2 {
-    font-size: clamp(40px, 11vw, 60px);
+    font-size: clamp(34px, 9.5vw, 46px);
   }
   .cta-panel > p {
     font-size: 14px;
