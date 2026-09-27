@@ -1,28 +1,93 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import "@fontsource-variable/inter";
 import "./globals.css";
+import {
+  repoUrl,
+  sharedOpenGraph,
+  sharedTwitter,
+  siteDescription,
+  siteName,
+  siteTitle,
+  siteUrl,
+} from "../lib/site";
 export const metadata: Metadata = {
-  metadataBase: new URL(
-    process.env.NEXT_PUBLIC_SITE_URL || "https://arrow-arch-landing.vercel.app",
-  ),
-  title: "The Arrow Arch — Aim once. Land once.",
-  description:
-    "One clear request in. A bounded AI crew plans, builds and proves the change before it lands. Powered by IBM Bob Shell.",
+  metadataBase: new URL(siteUrl),
+  title: { default: siteTitle, template: `%s | ${siteName}` },
+  description: siteDescription,
+  applicationName: siteName,
+  keywords: [
+    "AI coding agents",
+    "multi-agent code delivery",
+    "verified code changes",
+    "AI software engineering",
+    "Git worktrees",
+    "code verification",
+    "IBM Bob Shell",
+  ],
+  authors: [{ name: "The Arrow Arch", url: repoUrl }],
+  creator: "The Arrow Arch",
+  category: "technology",
+  alternates: { canonical: "/" },
   openGraph: {
-    title: "The Arrow Arch — Aim once. Land once.",
+    ...sharedOpenGraph,
+    url: "/",
+    title: siteTitle,
     description: "One prompt. A reviewable branch. A proof trail.",
-    images: ["/assets/illustrations/hero-trajectory.png"],
-    type: "website",
   },
-  twitter: { card: "summary_large_image" },
-  icons: { icon: "/assets/arrow-mark.svg" },
+  twitter: {
+    ...sharedTwitter,
+    title: siteTitle,
+    description: "One prompt. A reviewable branch. A proof trail.",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: { index: true, follow: true, "max-image-preview": "large" },
+  },
+  formatDetection: { telephone: false, email: false, address: false },
+};
+export const viewport: Viewport = {
+  themeColor: "#ffffff",
+  colorScheme: "light",
+  width: "device-width",
+  initialScale: 1,
+};
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": `${siteUrl}/#website`,
+      url: siteUrl,
+      name: siteName,
+      description: siteDescription,
+    },
+    {
+      "@type": "SoftwareApplication",
+      name: siteName,
+      url: siteUrl,
+      applicationCategory: "DeveloperApplication",
+      operatingSystem: "macOS, Linux",
+      description: siteDescription,
+      image: `${siteUrl}/opengraph-image.png`,
+      sameAs: [repoUrl],
+    },
+  ],
 };
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c"),
+          }}
+        />
+        {children}
+      </body>
     </html>
   );
 }

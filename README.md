@@ -57,7 +57,9 @@ npx vercel link
 npx vercel --prod
 ```
 
-Set `NEXT_PUBLIC_SITE_URL` to the canonical site URL if adding a custom domain. It controls social image resolution. All demo buttons lead to `/demo`; the repository links lead to the actual Arrow product.
+Set `NEXT_PUBLIC_SITE_URL` to the canonical site URL when the custom domain is live (planned: `https://arrow.atrey.dev`), then redeploy. It drives canonical links, Open Graph/Twitter image URLs, `robots.txt`, `sitemap.xml` and JSON-LD (see `lib/site.ts`).
+
+Brand assets: `app/favicon.ico` (16/32/48), `app/icon.svg`, `app/apple-icon.png`, `public/icons/*` (PWA manifest icons) and `public/opengraph-image.png` (1200×630 social card). All demo buttons lead to `/demo`; the repository links lead to the actual Arrow product.
 
 ## Content and evidence
 
